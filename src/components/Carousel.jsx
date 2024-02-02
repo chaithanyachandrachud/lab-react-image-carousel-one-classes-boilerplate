@@ -1,47 +1,54 @@
-import React, { useState } from "react";
+import React, { Component } from "react";
 import "./Carousel.css";
 import { images } from "../data/CarouselData";
-
+// you can explore more - and check as how to use materiul ui
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
-function Carousel() {
-  let [currIndex, setCurrIndex] = useState(0);
-
-  function moveBackward() {
-    if (currIndex <= 0) {
-      setCurrIndex(images.length - 1);
-    } else {
-      setCurrIndex(currIndex - 1);
-    }
+// implement the class below
+class Carousel extends Component {
+  constructor() {
+    super();
+    this.state = {
+      index: 2,
+    };
   }
 
-  function moveForward() {
-    if (currIndex == images.length - 1) {
-      setCurrIndex(0);
-    } else {
-      setCurrIndex(currIndex + 1);
-    }
-  }
+  render() {
+    let prevImage = () => {
+      this.setState((prevState) => ({
+        index: (prevState.index - 1 + images.length) % images.length,
+      }));
+    };
 
-  return (
-    <>
+    let nextImage = () => {
+      this.setState((prev) => ({
+        index: (prev.index + 1) % images.length,
+      }));
+    };
+
+    return (
       <div id="main">
-        <button className="button" onClick={moveBackward}>
-          <ArrowBackIosIcon />
-        </button>
-        <div id="image">
-          <img src={images[currIndex].img} alt="" />
-          <h1>{images[currIndex].title}</h1>
-          <p>{images[currIndex].subtitle}</p>
+        <div className="btn">
+          <ArrowBackIosIcon onClick={prevImage} />
         </div>
-
-        <button className="button" onClick={moveForward}>
-          <ArrowForwardIosIcon />
-        </button>
+        <div>
+          <div id="image">
+            <img src={images[this.state.index].img} />
+            <h1 className="abs-title">
+              <span>{images[this.state.index].title}</span>
+            </h1>
+            <p className="abs-sub">
+              <span>{images[this.state.index].subtitle}</span>
+            </p>
+          </div>
+        </div>
+        <div className="btn">
+          <ArrowForwardIosIcon onClick={nextImage} />
+        </div>
       </div>
-    </>
-  );
+    );
+  }
 }
 
 export default Carousel;
